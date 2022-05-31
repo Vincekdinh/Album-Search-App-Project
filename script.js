@@ -1,15 +1,12 @@
-const todolistCheckbox = document.querySelector(".btn-remove");
-const todolistAddItem = document.querySelector(".add-item");
-const todolistAddBtn = document.querySelector(".add-btn");
-
 let albums = [];
 
 //DOMselectors
-const albumSearch = document.querySelector("#album_search--term");
-const albumContent = document.querySelector(".content");
+const albumSearch = document.querySelector("#album__search-action");
+const albumContent = document.querySelector("#album__content");
 
 //setEvents
 function addAlbumEvent() {
+  displayLoading();
   albumSearch.addEventListener("submit", (e) => {
     e.preventDefault();
     const searchTerm = albumSearch.elements.query.value;
@@ -22,29 +19,72 @@ function addAlbumEvent() {
         albumArray = json.results;
         albums = albumArray;
         console.log(albums);
+        replaceAlbumHeader(albums);
+        hideLoading();
         renderAlbum(albums);
       });
     albumSearch.elements.query.value = "";
   });
 }
 
-addAlbumEvent();
+//addAlbumEvent();
 
 //loop over images
 function renderAlbum(albums) {
-  albums.map(function (album) {
+  return albums.map(function (album) {
     if (album.artworkUrl100) {
-      //selectors
-      let card = document.createElement("div");
-      let image = document.createElement("img");
-      let albumName = document.createElement("div");
+      //create elements
+      const albumCard = document.createElement("div");
+      const albumImage = document.createElement("img");
+      const albumName = document.createElement("div");
+      const albumLi = document.createElement("li");
+
+      //set attributes
+      albumCard.setAttribute("class", "album__content-card");
+      albumName.setAttribute("class", "album__content-name");
+      albumLi.setAttribute("class", "album__content-li");
 
       //content
-      image.src = album.artworkUrl100;
-      albumContent.append(card);
-      card.appendChild(image);
+      albumImage.src = album.artworkUrl100;
+      albumContent.append(albumLi);
+      albumLi.append(albumCard);
+      albumCard.appendChild(albumImage);
       albumName.innerText = album.collectionCensoredName;
-      card.appendChild(albumName);
+      albumCard.appendChild(albumName);
     }
   });
+}
+
+// <!-- loading spinner -->
+
+//select DOM element
+const albumInput = document.querySelector("#album__search-query");
+const albumButton = document.querySelector("#album__search-button");
+const albumHeader = document.querySelector("#album__header");
+
+//selecting loading div
+const loader = document.querySelector("#loading");
+
+//adding event listener to button
+albumButton.addEventListener("click", addAlbumEvent);
+
+//showing loading
+function displayLoading() {
+  loader.classList.add("display");
+  // to stop loading after some time
+  setTimeout(() => {
+    loader.classList.remove("display");
+  }, 5000);
+}
+
+//hiding loading
+function hideLoading() {
+  loader.classList.remove("display");
+}
+
+// <!-- number of results -->
+
+//replace album header
+function replaceAlbumHeader(albums) {
+  albumHeader.innerText = `"${albums.length} results"`;
 }

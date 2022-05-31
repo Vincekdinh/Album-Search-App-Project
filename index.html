@@ -7,30 +7,28 @@
     <title>Album Search App</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch-jsonp/1.0.6/fetch-jsonp.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@100&family=Permanent+Marker&display=swap" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar">
-        <section class="album_search">   
-            <form id="album_search--term">
-                <input class="album__search-query" type="text" placeholder='Search...' name="query">
-                <button>Search</i></button>
+    <!-- search bar: artist names -->
+    <nav id="album__navbar">
+        <section id="album__search">   
+            <form id="album__search-action">
+                <input id="album__search-query" type="text" placeholder='Artist name...' name="query" required>
+                <button id="album__search-button">Search</button>
             </form>
         </section>
     </nav>
-    <h3>Search Album by Artist Name</h3>
-    <hr>
-    <section id="container">
-        <ul class="content"></ul>
-        <!-- <div class="card">
-            <div class="userid">userId: ${todo.userId}</div>
-            <h3 class="title">${todo.id}. ${todo.title}</h3>
-            <div class="content-item__actions">
-            <input type="checkbox">Completed</input>
-          </div> -->
+    <!-- spinner -->
+    <div id="loading"></div>
+    <!-- header -->
+    <h3 id="album__header">Search Album by Artist Name</h3>
+    <!-- horizontal rule -->
+    <hr id="album__horizontal-rule">
+    <!-- photos add to screen -->
+    <section id="album__container">
+        <ol id="album__content"></ol>
     </section>
-
     <script src="script.js"></script>
 </body>
 </html>
-

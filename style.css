@@ -1,33 +1,115 @@
-body{
-    margin-top: 0;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
   
-  .navbar {
+  body {
+    background-color: lightgrey;
+  }
+  
+  /* search bar */
+  #album__navbar {
     text-align: center;
-    background-color: rgb(23, 119, 126);
+    background-image: linear-gradient(to right, rgba(255,0,0,0), rgb(13, 91, 155));
     height: 100px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
   
-  h3 {
-    text-align: center;
+  #album__search-query {
+    width: 500px;
+    border-radius: 5px;
+    height: 40px;
+    padding-left: 10px;
+  }
+  #album__search-button {
+    width: 100px;
+    margin: 10px;
+    padding: 5px
   }
   
-  hr {
+  /* header */
+  #album__header {
+    text-align: center;
+    font-family: 'Kanit', sans-serif;
+  }
+  
+  /* hr */
+  #album__horizontal-rule {
     border: 0;
     height: 1px;
     background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
   }
   
-  .content {
+  /* container */
+  #album__container {
+    max-width: 90%;
+    margin: 20px auto;
+    
+  }
+  
+  /* content */
+  #album__content {
     display: grid;
-    grid-template-columns: repeat(7, 5fr);
+    grid-template-columns: repeat(6, 1fr);
+    background-color: rgb(49, 102, 145);
+    border-radius: 20px;
+  }
+  .album__content-card > img {
+    object-fit: cover;
+    width: 100%;
+    max-height: 100%;
+    border-radius: 10%;
+  }
+  .album__content-card {
+    margin: 20px
+  }
+  .album__content-name {
+    font-family: 'Permanent Marker';
+    text-align: center;
+    color: lightgrey;
+    background-color: rgb(12, 54, 89);
+    border-radius: 10px;
+  }
+  .album__content-li {
+    list-style-type: none;
   }
   
-  input {
-    width: 300px;
-    border-radius: 10px
+  /* spinner */
+  #loading {
+    width: 2rem;
+    height: 2rem;
+    border: 5px solid #f3f3f3;
+    border-top: 6px solid #9c41f2;
+    border-radius: 100%;
+    margin: auto;
+    visibility: hidden;
+    animation: spin 1s infinite linear;
+  }
+  #loading.display {
+    visibility: visible;
+  }
+  @keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
   }
   
+  /* media queries */
+  @media screen and (max-width: 900px){
+    #album__content {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  @media screen and (max-width: 530px){
+    #album__content {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
