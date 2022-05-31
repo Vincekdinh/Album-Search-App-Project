@@ -17,7 +17,6 @@
     align-items: center;
     justify-content: center;
   }
-  
   #album__search-query {
     width: 500px;
     border-radius: 5px;
@@ -47,6 +46,7 @@
   #album__container {
     max-width: 90%;
     margin: 20px auto;
+    width: 100%;
     
   }
   
@@ -101,15 +101,29 @@
   }
   
   /* media queries */
-  @media screen and (max-width: 900px){
+  @media screen and (max-width: 1275px){
     #album__content {
-      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+  @media screen and (max-width: 1032px){
+    #album__content {
       grid-template-columns: repeat(4, 1fr);
     }
   }
-  @media screen and (max-width: 530px){
+  @media screen and (max-width: 722px){
     #album__content {
-      display: grid;
       grid-template-columns: repeat(2, 1fr);
     }
+    #album__search-query {
+        width: 400px;
+      }
+  }
+  @media screen and (max-width: 450px){
+    #album__content {
+      grid-template-columns: repeat(1, 1fr);
+    }
+    #album__search-query {
+        width: 350px;
+      }
   }
