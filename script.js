@@ -1,38 +1,77 @@
-let albums = [];
+var albumsList = [];
+var searchTerm = null;
+var offset = 0;
 
 //DOMselectors
 const albumSearch = document.querySelector("#album__search-action");
 const albumContent = document.querySelector("#album__content");
+const albumMoreBtn = document.querySelector("#album__search-more");
 
 //setEvents
 function addAlbumEvent() {
-  displayLoading();
   albumSearch.addEventListener("submit", (e) => {
     e.preventDefault();
-    const searchTerm = albumSearch.elements.query.value;
-    fetchJsonp(
-      `https://itunes.apple.com/search?term=${searchTerm}&media=music&entity=album&attribute=artistTerm&limit=200`
-    )
-      .then((response) => response.json())
-      .then((json) => {
-        console.log(json);
-        albumArray = json.results;
-        albums = albumArray;
-        console.log(albums);
-        replaceAlbumHeader(albums);
-        hideLoading();
-        renderAlbum(albums);
-      });
-    albumSearch.elements.query.value = "";
+    searchTerm = albumSearch.elements.query.value;
+
+    if (searchTerm) {
+      displayLoading();
+      fetchJsonp(
+        `https://itunes.apple.com/search?term=${searchTerm}&media=music&entity=album&attribute=artistTerm&limit=20&offset=0`
+      )
+        .then((response) => response.json())
+        .then((json) => {
+          console.log(json);
+          albumArray = json.results;
+          albums = albumArray;
+          console.log(albums);
+          hideLoading();
+          renderAlbum(albums);
+          albumMoreBtn.classList.remove("album__hide");
+          offset = 20;
+          console.log("initial offset: " + offset);
+        });
+      albumSearch.elements.query.value = "";
+    }
   });
 }
 
-//addAlbumEvent();
+function moreBtnAlbumEvent() {
+  albumMoreBtn.addEventListener("click", (e) => {
+    if (searchTerm) {
+      let searchURL = `https://itunes.apple.com/search?term=${searchTerm}&media=music&entity=album&attribute=artistTerm&limit=10&offset=${offset}`;
+      displayLoading();
+      fetchJsonp(searchURL)
+        .then((response) => response.json())
+        .then((json) => {
+          offset = offset + 10;
+          // console.log(json);
+          albumArray = json.results;
+          albums = albumArray;
+          // console.log(albums);
+          hideLoading();
+          renderAlbum(albums);
+          // console.log("offset: " + offset);
+          if (albums.length == 0) {
+            alert("No more results");
+            albumMoreBtn.classList.add("album__hide");
+          } else if (albumsList.length > 49) {
+            alert("You reached maximum capacity");
+            albumMoreBtn.classList.add("album__hide");
+          }
+        });
+    }
+  });
+}
+
+// addAlbumEvent();
+moreBtnAlbumEvent();
 
 //loop over images
 function renderAlbum(albums) {
-  return albums.map(function (album) {
-    if (album.artworkUrl100) {
+  for (let i = 0; i < albums.length; i++) {
+    // let startIndex = 0;
+
+    if (albums[i].artworkUrl100) {
       //create elements
       const albumCard = document.createElement("div");
       const albumImage = document.createElement("img");
@@ -45,16 +84,17 @@ function renderAlbum(albums) {
       albumLi.setAttribute("class", "album__content-li");
 
       //content
-      albumImage.src = album.artworkUrl100;
+      albumImage.src = albums[i].artworkUrl100;
       albumContent.append(albumLi);
       albumLi.append(albumCard);
       albumCard.appendChild(albumImage);
-      albumName.innerText = album.collectionCensoredName;
+      albumName.innerText = albums[i].collectionCensoredName;
       albumCard.appendChild(albumName);
+      albumsList.push(albums[i]);
     }
-  });
+  }
+  replaceAlbumHeader();
 }
-
 // <!-- loading spinner -->
 
 //select DOM element
@@ -67,6 +107,7 @@ const loader = document.querySelector("#loading");
 
 //adding event listener to button
 albumButton.addEventListener("click", addAlbumEvent);
+// albumMoreBtn.addEventListener("click", moreBtnAlbumEvent);
 
 //showing loading
 function displayLoading() {
@@ -85,6 +126,6 @@ function hideLoading() {
 // <!-- number of results -->
 
 //replace album header
-function replaceAlbumHeader(albums) {
-  albumHeader.innerText = `"${albums.length} results"`;
+function replaceAlbumHeader() {
+  albumHeader.innerText = `${albumsList.length} results for "${albumsList[0].artistName}"`;
 }
